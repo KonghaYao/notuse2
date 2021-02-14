@@ -51,3 +51,4 @@ async function main() {
     }
 }
 main();
+console.log("完成");
