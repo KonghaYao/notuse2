@@ -2,7 +2,7 @@ const fs = require("fs");
 const fetch = require("node-fetch");
 const cheerio = require("cheerio");
 const { Creator, sleep } = require("./index2.js");
-
+// 用于爬取 文章主要部分的爬虫代码
 async function main() {
     let res = fs.readFileSync("./init.json");
     var arr = JSON.parse(res).map((i) => i.link);
