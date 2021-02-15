@@ -10,12 +10,8 @@ function Creator(where, what) {
     // 将对象返回
     return pos;
 }
-function sleep(ms) {
-    return new Promise((res) => {
-        setTimeout(() => {
-            res();
-        }, ms);
-    });
+function sleep(time) {
+    return new Promise((resolve) => setTimeout(resolve, time));
 }
 
 AV.init({

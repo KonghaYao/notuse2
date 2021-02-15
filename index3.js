@@ -11,15 +11,60 @@ let all = {
 };
 let errCounter = 0;
 async function main() {
-    const query = new AV.Query("myfile");
-    query.greaterThan("replyPageNumber", 0);
-    let arr = await query.find().then((res) => {
-        return res
-            .map((item) => {
-                return [...Array(item.attributes.replyPageNumber).keys()].map((index) => `${item.attributes.link}?start=${index * 100}`);
-            })
-            .flat();
-    });
+    let arr = [
+        "https://www.douban.com/group/topic/175234705/?start=800",
+        "https://www.douban.com/group/topic/175234705/?start=900",
+        "https://www.douban.com/group/topic/175234705/?start=1000",
+        "https://www.douban.com/group/topic/175234705/?start=1200",
+        "https://www.douban.com/group/topic/175234705/?start=1300",
+        "https://www.douban.com/group/topic/207324203/?start=0",
+        "https://www.douban.com/group/topic/207324203/?start=100",
+        "https://www.douban.com/group/topic/196853161/?start=100",
+        "https://www.douban.com/group/topic/205641024/?start=100",
+        "https://www.douban.com/group/topic/175394317/?start=400",
+        "https://www.douban.com/group/topic/175394317/?start=500",
+        "https://www.douban.com/group/topic/175394317/?start=700",
+        "https://www.douban.com/group/topic/192973942/?start=0",
+        "https://www.douban.com/group/topic/192973942/?start=200",
+        "https://www.douban.com/group/topic/182637256/?start=0",
+        "https://www.douban.com/group/topic/182637256/?start=400",
+        "https://www.douban.com/group/topic/182637256/?start=500",
+        "https://www.douban.com/group/topic/182637256/?start=600",
+        "https://www.douban.com/group/topic/208783008/?start=300",
+        "https://www.douban.com/group/topic/194264769/?start=300",
+        "https://www.douban.com/group/topic/194264769/?start=400",
+        "https://www.douban.com/group/topic/194264769/?start=500",
+        "https://www.douban.com/group/topic/205432489/?start=200",
+        "https://www.douban.com/group/topic/205432489/?start=300",
+        "https://www.douban.com/group/topic/205432489/?start=400",
+        "https://www.douban.com/group/topic/205432489/?start=500",
+        "https://www.douban.com/group/topic/205432489/?start=600",
+        "https://www.douban.com/group/topic/170388876/?start=0",
+        "https://www.douban.com/group/topic/170388876/?start=400",
+        "https://www.douban.com/group/topic/170361210/?start=0",
+        "https://www.douban.com/group/topic/170361210/?start=100",
+        "https://www.douban.com/group/topic/170361210/?start=200",
+        "https://www.douban.com/group/topic/160335228/?start=200",
+        "https://www.douban.com/group/topic/175341701/?start=0",
+        "https://www.douban.com/group/topic/175341701/?start=100",
+        "https://www.douban.com/group/topic/175341701/?start=200",
+        "https://www.douban.com/group/topic/175341701/?start=300",
+        "https://www.douban.com/group/topic/181091439/?start=0",
+        "https://www.douban.com/group/topic/181091439/?start=100",
+        "https://www.douban.com/group/topic/181091439/?start=200",
+        "https://www.douban.com/group/topic/181091439/?start=300",
+        "https://www.douban.com/group/topic/207864339/?start=0",
+        "https://www.douban.com/group/topic/207864339/?start=100",
+        "https://www.douban.com/group/topic/205556608/?start=0",
+        "https://www.douban.com/group/topic/205556608/?start=100",
+        "https://www.douban.com/group/topic/205556608/?start=200",
+        "https://www.douban.com/group/topic/175187663/?start=100",
+        "https://www.douban.com/group/topic/175187663/?start=200",
+        "https://www.douban.com/group/topic/206340320/?start=0",
+        "https://www.douban.com/group/topic/206340320/?start=200",
+        "https://www.douban.com/group/topic/192917081/?start=0",
+        "https://www.douban.com/group/topic/192917081/?start=100",
+    ];
     let total = arr.length;
     console.log("总数", total);
     for (var i = 0; i < total; i++) {

@@ -24,7 +24,7 @@ async function main() {
         let result = res
             .map((i) => {
                 let { succ } = i.attributes;
-                return obj;
+                return succ;
             })
             .flat();
         downloadSheet(result, "文章基本信息");
