@@ -32,24 +32,31 @@ async function main() {
         })
             .then((res) => res.text())
             .then((res) => {
-                let match = res.match(/(?<=commentsVotes[\s\s]*?=[\s\S]*?')[\s\S]+?(?=')/);
-                let matchMessage = JSON.parse(match[0]);
-                console.log(matchMessage);
+                try {
+                    let match = res.match(/(?<=commentsVotes[\s\s]*?=[\s\S]*?')[\s\S]+?(?=')/);
+                    var matchMessage = JSON.parse(match[0]);
+                } catch (err) {}
                 $ = cheerio.load(res);
                 let comments = $(".clearfix.comment-item.reply-item ");
 
                 let obj = [...comments].map((item) => {
-                    return {
+                    let results = {
                         ArticleLink: link.split("?")[0],
                         time: $(".pubtime", item).text(),
                         authorName: $(".bg-img-green a", item).text(),
                         authorLink: $(".bg-img-green a", item).attr("href"),
-                        赞: matchMessage["c" + $(item).data("cid")] || 0,
+
                         replyContent: $(".reply-content", item).text(),
                         replyToWhat: $(".reply-quote-content short", item).text(),
                         replyToWho: $(".reply-quote-content pubdate", item).text(),
                         replyToWhoLink: $(".reply-quote-content pubdate", item).attr("href"),
                     };
+                    if (matchMessage && matchMessage.length) {
+                        results["赞"] = matchMessage["c" + $(item).data("cid")];
+                    } else {
+                        results["赞"] = 0;
+                    }
+                    return results;
                 });
                 obj.length ? all.succ.push(obj) : (all.err.push(link), console.log("错误数", errCounter++));
             });
