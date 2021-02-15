@@ -51,7 +51,7 @@ async function main() {
                         replyToWho: $(".reply-quote-content pubdate", item).text(),
                         replyToWhoLink: $(".reply-quote-content pubdate", item).attr("href"),
                     };
-                    if (matchMessage && matchMessage.length) {
+                    if (matchMessage) {
                         results["赞"] = matchMessage["c" + $(item).data("cid")];
                     } else {
                         results["赞"] = 0;
@@ -63,7 +63,6 @@ async function main() {
         await sleep(500);
     }
     console.log(all.err);
-    console.log(all.succ);
-    // if (all.succ) Creator("comment", all).save();
+    if (all.succ) Creator("comment", all).save();
 }
 main();
