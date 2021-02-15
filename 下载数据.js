@@ -23,7 +23,7 @@ async function main() {
     await query.find().then((res) => {
         let result = res
             .map((i) => {
-                let { obj } = i.attributes;
+                let { succ } = i.attributes;
                 return obj;
             })
             .flat();

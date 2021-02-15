@@ -49,9 +49,7 @@ async function main() {
                 });
                 obj.length ? all.succ.push(obj) : (all.err.push(link), console.log("错误数", errCounter++));
             })
-            .then((res) => {
-                sleep(random(20, 30) * 1000);
-            });
+            .then((res) => sleep(random(1, 10) * 1000));
     }
     Creator("comment", all).save();
 }
