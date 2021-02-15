@@ -40,7 +40,7 @@ async function main() {
                         time: $(".pubtime", item).text(),
                         authorName: $(".bg-img-green a", item).text(),
                         authorLink: $(".bg-img-green a", item).attr("href"),
-                        赞: parseInt($(".lnk-reply ", item).text().replace(/\D/g, "") || 0),
+                        赞: parseInt($(".lnk-fav ", item).text().replace(/\D/g, "") || 0),
                         replyContent: $(".reply-content", item).text(),
                         replyToWhat: $(".reply-quote-content short", item).text(),
                         replyToWho: $(".reply-quote-content pubdate", item).text(),
@@ -49,7 +49,7 @@ async function main() {
                 });
                 obj.length ? all.succ.push(obj) : (all.err.push(link), console.log("错误数", errCounter++));
             })
-            .then((res) => sleep(random(1, 10) * 1000));
+            .then((res) => sleep(random(5, 10) * 1000));
     }
     Creator("comment", all).save();
 }
