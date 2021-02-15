@@ -9,5 +9,5 @@ function save({ path, filename, token, repo, name, message = new Date().getTime(
     }).then((res) => res.json());
 }
 function Base64(text) {
-    return Buffer(String).toString("base64");
+    return Buffer(text).toString("base64");
 }

@@ -40,11 +40,10 @@ async function main() {
                     replyPageNumber: num && num.length ? parseInt($(num[num.length - 1]).text()) : 0,
                 };
                 console.log("编号", i, i / total);
+
                 return Creator("myfile", obj).save();
-            })
-            .then((res) => {
-                sleep(5000);
             });
+        await sleep(200);
     }
 }
 main();

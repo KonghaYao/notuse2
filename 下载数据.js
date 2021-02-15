@@ -4,22 +4,22 @@ const { Creator, sleep } = require("./index2.js");
 const fs = require("fs");
 // 使用后会直接下载并创建两个文件
 async function main() {
-    let query = new AV.Query("myfile");
-    await query.find().then((res) => {
-        let result = res.map((i) => {
-            let { link, title, text, authorName, authorLink, createAt, replyPageNumber } = i.attributes;
-            return {
-                link,
-                title,
-                text,
-                authorName,
-                authorLink,
-                createAt,
-                replyPageNumber,
-            };
-        });
-        downloadSheet(result, "文章基本信息");
-    });
+    // let query = new AV.Query("myfile");
+    // await query.find().then((res) => {
+    //     let result = res.map((i) => {
+    //         let { link, title, text, authorName, authorLink, createAt, replyPageNumber } = i.attributes;
+    //         return {
+    //             link,
+    //             title,
+    //             text,
+    //             authorName,
+    //             authorLink,
+    //             createAt,
+    //             replyPageNumber,
+    //         };
+    //     });
+    //     downloadSheet(result, "文章基本信息");
+    // });
     let query = new AV.Query("comment");
     await query.find().then((res) => {
         let result = res
