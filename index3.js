@@ -5,7 +5,10 @@ const cheerio = require("cheerio");
 const { Creator, sleep } = require("./index2.js");
 const AV = require("leancloud-storage");
 // 从数据库中取出URL数组
-var counter = 0;
+let all = {
+    succ: [],
+    err: [],
+};
 async function main() {
     const query = new AV.Query("myfile");
     query.greaterThan("replyPageNumber", 0);
@@ -43,7 +46,7 @@ async function main() {
                         replyToWhoLink: $(".reply-quote-content pubdate", item).attr("href"),
                     };
                 });
-                obj ? Creator("comment", { link, obj }).save() : (counter++, console.log("没有数据", counter));
+                obj.length ? all.succ.push(obj) : all.err.push(link);
             })
             .then((res) => {
                 sleep(random(10, 20) * 1000);
@@ -51,6 +54,7 @@ async function main() {
     }
 }
 main();
+Creator("comment", all).save();
 console.log("完成", counter);
 function random(n, m) {
     parseInt(Math.random() * (m - n) + n) + 1;
