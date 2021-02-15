@@ -9,6 +9,7 @@ let all = {
     succ: [],
     err: [],
 };
+let errCounter = 0;
 async function main() {
     const query = new AV.Query("myfile");
     query.greaterThan("replyPageNumber", 0);
@@ -46,7 +47,7 @@ async function main() {
                         replyToWhoLink: $(".reply-quote-content pubdate", item).attr("href"),
                     };
                 });
-                obj.length ? all.succ.push(obj) : all.err.push(link);
+                obj.length ? all.succ.push(obj) : (all.err.push(link), console.log("错误数", errCounter++));
             })
             .then((res) => {
                 sleep(random(10, 20) * 1000);
@@ -55,7 +56,6 @@ async function main() {
 }
 main();
 Creator("comment", all).save();
-console.log("完成", counter);
 function random(n, m) {
     parseInt(Math.random() * (m - n) + n) + 1;
 }
