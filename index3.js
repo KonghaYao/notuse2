@@ -20,7 +20,7 @@ async function main() {
             })
             .flat();
     });
-    let arr = ["https://www.douban.com/group/topic/106408653/?start=100"];
+    // let arr = ["https://www.douban.com/group/topic/106408653/?start=100"];
     let total = arr.length;
     console.log("总数", total);
     for (var i = 0; i < total; i++) {
