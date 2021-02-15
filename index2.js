@@ -1,4 +1,5 @@
 const AV = require("leancloud-storage");
+
 function Creator(where, what) {
     //创建一个数据库对象实例
     const Pos = AV.Object.extend(where);
@@ -16,26 +17,6 @@ function sleep(ms) {
         }, ms);
     });
 }
-function saveMessage(listName, array) {
-    const query = new AV.Query(listName);
-    query.select(["link"]);
-    query.descending("updatedAt");
-    query.limit(1000);
-    query.find().then((mark) => {
-        let Mark = mark.map((i) => i.attributes.link);
-        let needUpload = array
-            .map((i) => {
-                if (!Mark.includes(i.link)) {
-                    return Creator(listName, i);
-                } else {
-                    return null;
-                }
-            })
-            .filter((i) => i);
-        console.log(needUpload.length + "个数据被保存");
-        return AV.Object.saveAll(needUpload);
-    });
-}
 
 AV.init({
     appId: "7o55uh5WGJtci5Y8dq2vtDGh-gzGzoHsz",
@@ -43,7 +24,6 @@ AV.init({
     serverURL: "https://7o55uh5w.lc-cn-n1-shared.com",
 });
 module.exports = {
-    saveMessage,
     Creator,
     sleep,
 };

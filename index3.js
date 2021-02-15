@@ -5,13 +5,14 @@ const cheerio = require("cheerio");
 const { Creator, sleep } = require("./index2.js");
 const AV = require("leancloud-storage");
 // 从数据库中取出URL数组
+var counter = 0;
 async function main() {
     const query = new AV.Query("myfile");
     query.greaterThan("replyPageNumber", 0);
     let arr = await query.find().then((res) => {
         return res
-            .map((i) => {
-                return [...Array(i.attributes.replyPageNumber).keys()].map((index) => `${i.attributes.link}?start=${index * 100}`);
+            .map((item) => {
+                return [...Array(item.attributes.replyPageNumber).keys()].map((index) => `${item.attributes.link}?start=${index * 100}`);
             })
             .flat();
     });
@@ -19,7 +20,6 @@ async function main() {
     console.log("总数", total);
     for (var i = 0; i < total; i++) {
         let link = arr[i];
-
         console.log("编号开始", i);
         await fetch(link, {
             referrer: link,
@@ -43,12 +43,15 @@ async function main() {
                         replyToWhoLink: $(".reply-quote-content pubdate", item).attr("href"),
                     };
                 });
-                return Creator("comment", { obj }).save();
+                obj ? Creator("comment", { link, obj }).save() : (counter++, console.log("没有数据", counter));
             })
             .then((res) => {
-                sleep(5000);
+                sleep(random(10, 20) * 1000);
             });
     }
 }
 main();
-console.log("完成");
+console.log("完成", counter);
+function random(n, m) {
+    parseInt(Math.random() * (m - n) + n) + 1;
+}
