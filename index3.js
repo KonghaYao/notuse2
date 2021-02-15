@@ -11,16 +11,16 @@ let all = {
 };
 let errCounter = 0;
 async function main() {
-    // const query = new AV.Query("myfile");
-    // query.greaterThan("replyPageNumber", 0);
-    // let arr = await query.find().then((res) => {
-    //     return res
-    //         .map((item) => {
-    //             return [...Array(item.attributes.replyPageNumber).keys()].map((index) => `${item.attributes.link}?start=${index * 100}`);
-    //         })
-    //         .flat();
-    // });
-    let arr = ["https://www.douban.com/group/topic/106408653/?start=0"];
+    const query = new AV.Query("myfile");
+    query.greaterThan("replyPageNumber", 0);
+    let arr = await query.find().then((res) => {
+        return res
+            .map((item) => {
+                return [...Array(item.attributes.replyPageNumber).keys()].map((index) => `${item.attributes.link}?start=${index * 100}`);
+            })
+            .flat();
+    });
+    // let arr = ["https://www.douban.com/group/topic/106408653/?start=0"];
     let total = arr.length;
     console.log("总数", total);
     for (var i = 0; i < total; i++) {
