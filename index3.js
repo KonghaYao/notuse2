@@ -11,19 +11,16 @@ let all = {
 };
 let errCounter = 0;
 async function main() {
-    let arr = [
-        "https://www.douban.com/group/topic/181091439/?start=0",
-        "https://www.douban.com/group/topic/181091439/?start=100",
-        "https://www.douban.com/group/topic/181091439/?start=200",
-        "https://www.douban.com/group/topic/181091439/?start=300",
-        "https://www.douban.com/group/topic/207864339/?start=0",
-        "https://www.douban.com/group/topic/207864339/?start=100",
-        "https://www.douban.com/group/topic/205556608/?start=0",
-        "https://www.douban.com/group/topic/175187663/?start=200",
-        "https://www.douban.com/group/topic/206340320/?start=0",
-        "https://www.douban.com/group/topic/206340320/?start=100",
-        "https://www.douban.com/group/topic/206340320/?start=200",
-    ];
+    const query = new AV.Query("myfile");
+    query.greaterThan("replyPageNumber", 0);
+    let arr = await query.find().then((res) => {
+        return res
+            .map((item) => {
+                return [...Array(item.attributes.replyPageNumber).keys()].map((index) => `${item.attributes.link}?start=${index * 100}`);
+            })
+            .flat();
+    });
+    let arr = ["https://www.douban.com/group/topic/106408653/?start=100"];
     let total = arr.length;
     console.log("总数", total);
     for (var i = 0; i < total; i++) {
@@ -35,8 +32,11 @@ async function main() {
         })
             .then((res) => res.text())
             .then((res) => {
+                let match = res.match(/(?<=commentsVotes[\s\s]*?=[\s\S]*?')[\s\S]+?(?=')/);
+                let matchMessage = JSON.parse(match[0]);
+                console.log(matchMessage);
                 $ = cheerio.load(res);
-                let comments = $(".comment-item.reply-item");
+                let comments = $(".clearfix.comment-item.reply-item ");
 
                 let obj = [...comments].map((item) => {
                     return {
@@ -44,7 +44,7 @@ async function main() {
                         time: $(".pubtime", item).text(),
                         authorName: $(".bg-img-green a", item).text(),
                         authorLink: $(".bg-img-green a", item).attr("href"),
-                        赞: parseInt($(".lnk-fav ", item).text().replace(/\D/g, "") || 0),
+                        赞: matchMessage["c" + $(item).data("cid")] || 0,
                         replyContent: $(".reply-content", item).text(),
                         replyToWhat: $(".reply-quote-content short", item).text(),
                         replyToWho: $(".reply-quote-content pubdate", item).text(),
@@ -53,9 +53,10 @@ async function main() {
                 });
                 obj.length ? all.succ.push(obj) : (all.err.push(link), console.log("错误数", errCounter++));
             });
-        await sleep(2000);
+        await sleep(100);
     }
     console.log(all.err);
+    // console.log(all.succ);
     if (all.succ) Creator("comment", all).save();
 }
 main();

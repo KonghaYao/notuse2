@@ -30,7 +30,6 @@ async function main() {
             .flat();
 
         downloadSheet(result, "评论信息");
-        fs.writeFile("./1.json", JSON.stringify(result), function (err) {});
     });
 }
 main();
