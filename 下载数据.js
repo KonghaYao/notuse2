@@ -1,33 +1,36 @@
 const AV = require("leancloud-storage");
 const XLSX = require("xlsx");
 const { Creator, sleep } = require("./index2.js");
+const fs = require("fs");
 // 使用后会直接下载并创建两个文件
 async function main() {
-    // let query = new AV.Query("myfile");
-    // await query.find().then((res) => {
-    //     let result = res.map((i) => {
-    //         let { link, title, text, authorName, authorLink, createAt, replyPageNumber } = i.attributes;
-    //         return {
-    //             link,
-    //             title,
-    //             text,
-    //             authorName,
-    //             authorLink,
-    //             createAt,
-    //             replyPageNumber,
-    //         };
-    //     });
-    //     downloadSheet(result, "文章基本信息");
-    // });
+    let query = new AV.Query("myfile");
+    await query.find().then((res) => {
+        let result = res.map((i) => {
+            let { link, title, text, authorName, authorLink, createAt, replyPageNumber } = i.attributes;
+            return {
+                link,
+                title,
+                text,
+                authorName,
+                authorLink,
+                createAt,
+                replyPageNumber,
+            };
+        });
+        downloadSheet(result, "文章基本信息");
+    });
     let query = new AV.Query("comment");
     await query.find().then((res) => {
         let result = res
             .map((i) => {
                 let { succ } = i.attributes;
-                return succ;
+                return succ.flat();
             })
             .flat();
-        downloadSheet(result, "文章基本信息");
+
+        downloadSheet(result, "评论信息");
+        fs.writeFile("./1.json", JSON.stringify(result), function (err) {});
     });
 }
 main();
@@ -45,7 +48,6 @@ function downloadSheet(afterParse, name, bookType = "xlsx") {
     let sheet = XLSX.utils.json_to_sheet(afterParse);
 
     XLSX.utils.book_append_sheet(newbook, sheet, "爬取结果");
-    console.log(newbook);
     XLSX.writeFile(newbook, name + "." + bookType, {
         bookType,
     });
