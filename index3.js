@@ -50,12 +50,13 @@ async function main() {
                 obj.length ? all.succ.push(obj) : (all.err.push(link), console.log("错误数", errCounter++));
             })
             .then((res) => {
-                sleep(random(10, 20) * 1000);
+                sleep(random(20, 30) * 1000);
             });
     }
+    Creator("comment", all).save();
 }
 main();
-Creator("comment", all).save();
+
 function random(n, m) {
     parseInt(Math.random() * (m - n) + n) + 1;
 }
